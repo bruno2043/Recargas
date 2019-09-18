@@ -1,0 +1,154 @@
+﻿@model Recargas.Models.Pedido
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Alterando Pedido</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.PedidoProducto.PedidoId)
+    @*---------------------------------------------------------------------------------------------------------------------------------------*@
+    <h4>Dados del Pedido</h4>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(model => model.Fecha_Pedido, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(m => m.Fecha_Pedido)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Proprietário", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(m => m.Persona.Nome)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Punto.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(m => m.Punto.Nome)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.TotalEntregue, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(m => m.TotalEntregue)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TotalPago, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(m => m.TotalPago)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TotalDeuda, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(m => m.TotalDeuda)
+        </div>
+    </div>
+
+    <hr />
+    @Html.Partial("_IndexProductos", Model.PedidoProductos)
+    <hr />
+    @*---------------------------------------------------------------------------------------------------------------------------------------*@
+    <h4>Adicionar Producto al pedido</h4>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(model => model.PedidoProducto.ProductoId, "ProductoId", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @*@Html.DropDownList("PedidoProducto.ProductoId", null, htmlAttributes: new { @class = "form-control" })*@
+            @Html.DropDownListFor(m => m.PedidoProducto.ProductoId, ViewBag.ProductoId as SelectList, htmlAttributes: new { @class = "form-control", @onchange = "cambiaPrecio()" })
+            @Html.ValidationMessageFor(model => model.PedidoProducto.ProductoId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PedidoProducto.Fecha_Modificacion, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.PedidoProducto.Fecha_Modificacion, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PedidoProducto.Fecha_Modificacion, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PedidoProducto.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.PedidoProducto.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PedidoProducto.Cantidad, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PedidoProducto.Producto.Precio, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.PedidoProducto.Precio, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PedidoProducto.Producto.Precio, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PedidoProducto.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListFor(model => model.PedidoProducto.Status, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.PedidoProducto.Status, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Adicionar Produto" class="btn btn-default" />
+        </div>
+    </div>
+    @*---------------------------------------------------------------------------------------------------------------------------------------*@
+    <h4>Pagamentos</h4>
+    <hr />
+    @Html.Partial("_IndexPagamentos", Model.Pagamentos)
+    <hr />
+    <div class="form-group">
+        <div class="col-md-12">
+            @Html.ActionLink("Adicionar Pagamento", "../Pagamentos/Create", new { idPedido = Model.Id }, new { @class = "btn btn-default" })
+        </div>
+    </div>
+
+</div>
+}
+
+<div>
+    @Html.ActionLink("Voltar para Lista de Pedidos", "Index")
+</div>
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+
+<script>
+    function cambiaPrecio() {
+        var productoId = $('#PedidoProducto_ProductoId').val();
+        $.ajax({
+            url: '/Productos/GetPrecio',
+            type: "GET",
+            dataType: "JSON",
+            data: { productoId: productoId },
+            success: function (precio) {
+                $("#PedidoProducto_Precio").val(precio);
+            }
+        });
+    }
+    
+
+    $(document).ready(function () {
+        cambiaPrecio();
+    });
+</script>

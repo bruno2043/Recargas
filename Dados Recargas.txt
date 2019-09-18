@@ -1,0 +1,6 @@
+servidor: recargasjmdbserver.database.windows.net
+nome de usuario administrador: rerum
+senha de administrador: 123!@#qweASD
+
+nome banco de dados: RecargasJMS_db
+Cadeia de conexão: DefaultConnection

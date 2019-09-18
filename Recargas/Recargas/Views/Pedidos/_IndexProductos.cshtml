@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Recargas.Models.PedidoProducto>
+
+<h4>Lista de Productos</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Producto.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Precio)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Producto.Nome)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Cantidad)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Precio)
+    </td>
+    
+    <td>
+        @Html.DisplayFor(modelItem => item.Status)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "../PedidoProductos/Edit", new {  idPedido=item.PedidoId, idProducto=item.ProductoId  }) 
+    </td>
+</tr>
+}
+
+</table>

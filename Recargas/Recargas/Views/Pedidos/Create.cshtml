@@ -1,0 +1,100 @@
+﻿@model Recargas.Models.Pedido
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Crear Nuevo Pedido</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>Pedido</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Fecha_Pedido, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Fecha_Pedido, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Fecha_Pedido, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @Html.HiddenFor(model => model.Fecha_Modificacion)
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.PuntoId, "PuntoId", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("PuntoId", null, htmlAttributes: new { @class = "form-control", @onchange = "cambiaPersona()" })
+            @Html.ValidationMessageFor(model => model.PuntoId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PersonaId, "PersonaId", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("PersonaId", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.PersonaId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Crear Nuevo Pedido" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Volver para lista de pedidos", "Index")
+</div>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
+
+<script type="text/javascript" language="javascript">
+    function cambiaPersona() {
+        var puntoId = $('#PuntoId').val();
+        $.ajax({
+            url: '/Puntos/GetPersona',
+            type: "GET",
+            dataType: "JSON",
+            data: { puntoId: puntoId },
+            success: function (persona) {
+                $("#PersonaId").val(persona);
+            }
+        });
+    }
+
+
+    $(document).ready(function () {
+        cambiaPersona();
+    });
+
+    $(function () {
+        $('input[type=datetime]').datepicker({
+            dateFormat: 'dd/mm/yy 00:01',
+            timeFormat:  'hh:mm',
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S', 'D'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb', 'Dom'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Maio', 'Junio', 'Jullo', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec'],
+            nextText: 'Proximo',
+            prevText: 'Anterior',
+            showOn: "button"
+        }).css("display", "inline-block")
+            .next("button").button({
+                icons: { primary: "ui-icon-calendar" },
+                label: "",
+                text: false
+            });
+    });
+</script>
+

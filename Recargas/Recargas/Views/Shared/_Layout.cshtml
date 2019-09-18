@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <link href="~/Content/themes/base/all.css" rel="stylesheet" />
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Recargas Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Rutas", "Index", "Rutas", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Personas", "Index", "Personas", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Puntos", "Index", "Puntos", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Productos", "Index", "Productos", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Pedidos", "Index", "Pedidos", new { area = "" }, null)</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Logoff", "Logoff", "Accounts", null, null)</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "Accounts", null, null);</li>
+                    }
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+
+        <hr style="margin-top:20px;" />
+        <hr style="margin-top:20px;" />
+        <hr style="margin-top:20px;" />
+        <footer style="margin-top:20px;">
+            <p>&copy; @DateTime.Now.Year - Recargas J+M=S</p>
+        </footer>
+    </div>
+
+
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
